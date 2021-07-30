@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}CRM Dashboard{% endblock %}
+
+{% block body %}
+{% include 'sidebar.html.twig' %}
+
+<div class="col-md-9 col-xl-8">
+   <div class="row">
+        <div class="col-9">
+            
+        </div>
+        <div class="col-3">
+            <a class="btn btn-success" href="{{ path('add_client') }}">
+                <i class="fas fa-user pr-1"></i> Add new</a>
+        </div>
+   </div>
+
+</div>
+{% endblock %}
