@@ -2,24 +2,66 @@
 
 namespace App\Controller;
 
+use App\Entity\Client;
+use App\Form\ClientType;
+use App\Repository\ClientRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Twig\Environment;
 
 #[Route('clients')]
 class ClientController extends AbstractController
 {
-    #[Route('', name: 'clients')]
-    public function index(): Response
+    private $twig;
+    private $entityManager;
+
+    public function __construct(Environment $twig, EntityManagerInterface $entityManager)
     {
-        return $this->render('client/index.html.twig', [
-            'controller_name' => 'ClientController',
-        ]);
+        $this->twig = $twig;
+        $this->entityManager = $entityManager;
+    }
+
+    #[Route('', name: 'clients')]
+    public function index(ClientRepository $clientRepository): Response
+    {
+        $response = new Response($this->twig->render('client/index.html.twig', [
+            'clients' => $clientRepository->findAll(),
+        ]));
+        
+        return $response;
+    }
+
+    #[Route('/clients/{id}', name: 'clients_view')]
+    public function show(ClientRepository $clientRepository, int $id): Response
+    {
+        return new Response($this->twig->render('client/show.html.twig', [
+            'client' => $clientRepository->find($id),
+        ]));
     }
 
     #[Route('/add', name:'add_client')]
-    public function add(): Response
+    public function add(Request $request): Response
     {
-        return new Response();
+        $client = new Client();
+
+        $form = $this->createForm(ClientType::class, $client);
+
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid()) {
+            $client = $form->getData();
+
+            $this->entityManager->persist($client);
+            $this->entityManager->flush();
+
+            return $this->redirectToRoute('dashboard');
+        }
+        
+        return $this->render('client/add.html.twig', [
+            'form' => $form->createView(),
+        ]);
+
     }
 }

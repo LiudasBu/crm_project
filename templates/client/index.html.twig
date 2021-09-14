@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}CRM Dashboard{% endblock %}
+{% block title %}Clients{% endblock %}
 
 {% block body %}
 {% include 'sidebar.html.twig' %}
@@ -8,7 +8,11 @@
 <div class="col-md-9 col-xl-8">
    <div class="row">
         <div class="col-9">
-            
+            {% for client in clients %}
+                <a href="{{ path('clients_view', { id: client.id }) }}">
+                    <h4>{{ client.name }}</h4> 
+                </a>
+            {% endfor %}
         </div>
         <div class="col-3">
             <a class="btn btn-success" href="{{ path('add_client') }}">
