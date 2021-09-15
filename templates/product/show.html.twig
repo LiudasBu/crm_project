@@ -1,0 +1,25 @@
+{% extends 'base_crm.html.twig' %}
+
+{% block title %} {{product.name}} {% endblock %}
+
+{% block body %}
+
+   <div class="row">
+        <div class="col-3">
+            <h4> {{ product.name }} </h4>        
+        </div>
+        <div class="col-3">
+            <h6>€{{ product.price }}</h6>
+        </div>
+        <div class="col-3">
+            <h6></h6>
+        </div>
+        <div class="col-3">
+            <h6></h6>
+        </div>
+   </div>
+    <div class="row">
+       
+    </div>
+
+{% endblock %}

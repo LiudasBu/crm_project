@@ -1,11 +1,8 @@
-{% extends 'base.html.twig' %}
+{% extends 'base_crm.html.twig' %}
 
 {% block title %}Clients{% endblock %}
 
 {% block body %}
-{% include 'sidebar.html.twig' %}
-
-<div class="col-md-9 col-xl-8">
    <div class="row">
         <div class="col-9">
             {% for client in clients %}
@@ -19,6 +16,4 @@
                 <i class="fas fa-user pr-1"></i> Add new</a>
         </div>
    </div>
-
-</div>
 {% endblock %}

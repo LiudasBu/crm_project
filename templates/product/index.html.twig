@@ -1,0 +1,19 @@
+{% extends 'base_crm.html.twig' %}
+
+{% block title %}Products{% endblock %}
+
+{% block body %}
+   <div class="row">
+        <div class="col-9">
+            {% for product in products %}
+                <a href="{{ path('products_view', { id: product.id }) }}">
+                    <h4>{{ product.name }}</h4> 
+                </a>
+            {% endfor %}
+        </div>
+        <div class="col-3">
+            <a class="btn btn-success" href="{{ path('add_product') }}">
+                <i class="fas fa-user pr-1"></i> Add new</a>
+        </div>
+   </div>
+{% endblock %}

@@ -34,7 +34,7 @@ class ClientController extends AbstractController
         return $response;
     }
 
-    #[Route('/clients/{id}', name: 'clients_view')]
+    #[Route('/client/{id}', name: 'clients_view')]
     public function show(ClientRepository $clientRepository, int $id): Response
     {
         return new Response($this->twig->render('client/show.html.twig', [
@@ -56,12 +56,11 @@ class ClientController extends AbstractController
             $this->entityManager->persist($client);
             $this->entityManager->flush();
 
-            return $this->redirectToRoute('dashboard');
+            return $this->redirectToRoute('clients');
         }
         
         return $this->render('client/add.html.twig', [
             'form' => $form->createView(),
         ]);
-
     }
 }
