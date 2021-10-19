@@ -65,6 +65,10 @@ class Client
         $this->orders = new ArrayCollection();
     }
 
+    public function __toString()
+    {
+        return $this->getName();
+    }
     /**
      * @ORM\PrePersist
      */

@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Order;
+use App\Entity\Client;
 use App\Form\OrderType;
 use App\Repository\OrderRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -34,12 +35,25 @@ class OrderController extends AbstractController
         return $response;
     }
 
-    #[Route('/add', name:'add_order')]
-    public function add(Request $request): Response
+    #[Route('/order/{id}', name: 'orders_view')]
+    public function show(OrderRepository $orderRepository, int $id): Response
+    {
+        return new Response($this->twig->render('client/show.html.twig', [
+            'order' => $orderRepository->find($id),
+        ]));
+    }
+
+    #[Route('/add/{clientId}', name:'add_order')]
+    public function add(Request $request, ?int $clientId = null): Response
     {
         $order = new Order();
 
         $form = $this->createForm(OrderType::class, $order);
+        if($clientId) {
+            $client = $this->entityManager->getRepository(Client::class)->find($clientId);
+            $order->setClient($client);
+            $form->setData($order);
+        }
 
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()) {

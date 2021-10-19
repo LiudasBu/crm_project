@@ -9,12 +9,15 @@
             <h4> {{ client.name }} </h4>        
         </div>
         <div class="col-3">
+            <p>Email</p>
             <h6> {{ client.email }} </h6>
         </div>
         <div class="col-3">
+            <p>Address</p>
             <h6> {{ client.address }} </h6>
         </div>
         <div class="col-3">
+            <p>Created at</p>   
             <h6> {{ client.createdAt|date("m/d/Y") }} </h6>
         </div>
    </div>
@@ -33,7 +36,14 @@
             </ul>
             <div class="tab-content" id="myTabContent">
                 <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">bumbas</div>
-                <div class="tab-pane fade" id="orders" role="tabpanel" aria-labelledby="orders-tab">gumbas</div>
+                <div class="tab-pane fade" id="orders" role="tabpanel" aria-labelledby="orders-tab">
+                <a class="btn btn-success" href="{{ path('add_order', { clientId: client.id }) }}">
+                    <i class="fas fa-user pr-1"></i> Add new</a>
+
+                    {% for order in client.orders %}
+                        {{order.id}}
+                    {% endfor %}
+                </div>
                 <div class="tab-pane fade" id="more" role="tabpanel" aria-labelledby="more-tab">dumbas</div>
             </div>
         </div>

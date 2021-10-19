@@ -7,13 +7,12 @@
         <div class="col-9">
             {% for order in orders %}
                 <a href="{{ path('orders_view', { id: order.id }) }}">
-                    <h4>{{ order.description }}</h4> 
+                    <h4>{{ order.id }} {{ order.client }}</h4> 
                 </a>
             {% endfor %}
         </div>
         <div class="col-3">
-            <a class="btn btn-success" href="{{ path('add_order') }}">
-                <i class="fas fa-user pr-1"></i> Add new</a>
+           
         </div>
    </div>
 {% endblock %}

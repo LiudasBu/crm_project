@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Product;
 use App\Entity\Order;
+use App\Entity\Client;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -21,6 +22,11 @@ class OrderType extends AbstractType
                 'expanded'  => true,
                 'multiple'  => true,
             ))
+            ->add('client', EntityType::class, array(
+                'class'     => Client::class,
+                'disabled'  => true,
+            ))
+            ->add('save', SubmitType::class, ['label' => 'Save'])
         ; 
     }
 
