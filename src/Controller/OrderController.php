@@ -77,6 +77,7 @@ class OrderController extends AbstractController
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()) {
             $order = $form->getData();
+
             $this->entityManager->persist($order);
             $this->entityManager->flush();
 

@@ -35,16 +35,17 @@
                 </li>
             </ul>
             <div class="tab-content" id="myTabContent">
-                <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">bumbas</div>
+                <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">Home</div>
                 <div class="tab-pane fade" id="orders" role="tabpanel" aria-labelledby="orders-tab">
                 <a class="btn btn-success" href="{{ path('add_order', { clientId: client.id }) }}">
                     <i class="fas fa-user pr-1"></i> Add new</a>
-
+                    <br>
                     {% for order in client.orders %}
-                        {{order.id}}
+                        <a href="{{ path('orders_view', {id: order.id}) }}">{{order.id}}</a>
+                        <br>
                     {% endfor %}
                 </div>
-                <div class="tab-pane fade" id="more" role="tabpanel" aria-labelledby="more-tab">dumbas</div>
+                <div class="tab-pane fade" id="more" role="tabpanel" aria-labelledby="more-tab">More</div>
             </div>
         </div>
     </div>

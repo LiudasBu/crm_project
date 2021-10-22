@@ -30,7 +30,7 @@ class Product
     private $price;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Order::class, inversedBy="products")
+     * @ORM\ManyToMany(targetEntity=Order::class, mappedBy="products")
      */
     private $orders;
 
