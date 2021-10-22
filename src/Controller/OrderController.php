@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Order;
 use App\Entity\Client;
+use App\Entity\Product;
 use App\Form\OrderType;
 use App\Repository\OrderRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -12,6 +13,9 @@ use Symfony\Component\Routing\Annotation\Route;
 use Twig\Environment;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Dompdf\Dompdf;
+use Dompdf\Options;
+use Exception;
 
 #[Route('/orders')]
 class OrderController extends AbstractController
@@ -36,11 +40,26 @@ class OrderController extends AbstractController
     }
 
     #[Route('/order/{id}', name: 'orders_view')]
-    public function show(OrderRepository $orderRepository, int $id): Response
+    public function show(OrderRepository $orderRepository, Dompdf $dompdf, int $id): Response
     {
-        return new Response($this->twig->render('client/show.html.twig', [
-            'order' => $orderRepository->find($id),
-        ]));
+        $order = $orderRepository->find($id);
+        if($order === null) {
+            //return new RedirectResponse();  TODO: user friendly exception handling
+            throw new Exception("Order not found");
+        }
+
+        $html = $this->renderView('export/pdf/order.html.twig', [
+            'title' => "Order {$id}",
+            'order' => $order
+        ]);
+dd($this->entityManager->getRepository(Product::class)->findBy(['orders' => $order->getId()]));
+        $dompdf->loadHtml($html);
+        $dompdf->setPaper('A4', 'portrait');
+        $dompdf->render();
+        $dompdf->stream("order.pdf", [
+            "Attachment" => false
+        ]);
+        exit(0); //TODO: find a better way
     }
 
     #[Route('/add/{clientId}', name:'add_order')]
@@ -58,7 +77,6 @@ class OrderController extends AbstractController
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()) {
             $order = $form->getData();
-
             $this->entityManager->persist($order);
             $this->entityManager->flush();
 
