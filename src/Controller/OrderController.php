@@ -52,7 +52,7 @@ class OrderController extends AbstractController
             'title' => "Order {$id}",
             'order' => $order
         ]);
-dd($this->entityManager->getRepository(Product::class)->findBy(['orders' => $order->getId()]));
+
         $dompdf->loadHtml($html);
         $dompdf->setPaper('A4', 'portrait');
         $dompdf->render();
