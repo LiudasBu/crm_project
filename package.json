@@ -21,6 +21,19 @@
     "postinstall": "yarn encore production --progress" 
 },
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.15.3",
+    "@popperjs/core": "^2.9.2",
+    "@symfony/stimulus-bridge": "^2.0.0",
+    "@symfony/webpack-encore": "^1.5.0",
+    "bootstrap": "^5.0.2",
+    "bs-custom-file-input": "^1.3.4",
+    "jquery": "^3.6.0",
+    "node-sass": "^6.0.1",
+    "sass-loader": "^12.1.0",
+    "stimulus": "^2.0.0",
+    "ts-loader": "^9.0.0",
+    "typescript": "^4.3.5",
+    "webpack-notifier": "^1.6.0",
     "core-js": "^3.16.0",
     "sweetalert2": "^11.1.10"
   }
