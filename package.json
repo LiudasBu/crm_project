@@ -15,10 +15,10 @@
     "webpack-notifier": "^1.6.0"
   },
   "scripts": {
-    "dev-server": "encore dev-server",
-    "dev": "encore dev",
-    "watch": "encore dev --watch",
-    "postinstall": "encore production --progress" 
+    "dev-server": "yarn encore dev-server",
+    "dev": "yarn encore dev",
+    "watch": "yarn encore dev --watch",
+    "postinstall": "yarn encore production --progress" 
 },
   "dependencies": {
     "core-js": "^3.16.0",
