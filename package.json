@@ -15,10 +15,7 @@
     "webpack-notifier": "^1.6.0"
   },
   "scripts": {
-    "dev-server": "yarn encore dev-server",
-    "dev": "yarn encore dev",
-    "watch": "yarn encore dev --watch",
-    "postinstall": "yarn encore production --progress" 
+    "heroku-postbuild" : "node_modules/.bin/encore production"
 },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.15.3",
