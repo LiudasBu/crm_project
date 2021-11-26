@@ -3,7 +3,7 @@
 {% block title %} {{order.client.name}} {% endblock %}
 
 {% block body %}
-
+    <div id="current-entity-id" class="d-none">{{order.id}}</div>
    <div class="row">
         <div class="col-3">
             <h4> {{ order.id }} </h4>        
@@ -35,7 +35,16 @@
         </ul>
               <input type="submit" value="Update">
         </form>
+        {% if is_granted('ROLE_ADMIN') %}
+            <button id="delete-button">Delete</button>
+        {% endif %}
+        <div>
+            <a class="btn btn-md btn-secondary mt-2" href="{{ path('orders_export', {'id': order.id}) }}">
+                PDF
+            </a>
         </div>
+        </div>
+            {{ encore_entry_script_tags('remove_order') }}
     </div>
 
 {% endblock %}

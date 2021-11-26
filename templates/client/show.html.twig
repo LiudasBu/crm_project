@@ -19,6 +19,7 @@
         <div class="col-3">
             <p>Created at</p>   
             <h6> {{ client.createdAt|date("m/d/Y") }} </h6>
+            <a href="{{ path('edit_client', {id: client.id}) }}">Redaguoti</a>
         </div>
    </div>
     <div class="row">

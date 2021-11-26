@@ -15,13 +15,20 @@
         <h4>Client : {{ order.client.name }}</h4>
         <h5>Products</h5>
         <ul>
+        {% set total_sum = 0 %}
             {% for product in order.products %}
                 <li>
                     Name: {{ product.name }}
                     <br>
-                    Price: {{ product.price }}€
+                    Unit price: {{ product.price }}€
+                    <br>
+                    Amount: {{ amount[product.id] }}
+                    <br>
+                    Total price: {{ amount[product.id] * product.price }}€
+                    {% set total_sum =  total_sum + (amount[product.id] * product.price) %}
                 </li>
             {% endfor %}
         </ul>
+        <h4>Total price: {{ total_sum }}€</h4>
     </body>
 </html>

@@ -61,6 +61,7 @@ class OrderController extends AbstractController
         return $this->redirectToRoute('orders_view', ['id' => $orderId]);
     }
 
+    #[Route('/export/{id}', name: 'orders_export')]
     public function export(OrderRepository $orderRepository, Dompdf $dompdf, int $id): Response
     {
         $order = $orderRepository->find($id);
@@ -71,7 +72,8 @@ class OrderController extends AbstractController
 
         $html = $this->renderView('export/pdf/order.html.twig', [
             'title' => "Order {$id}",
-            'order' => $order
+            'order' => $order,
+            'amount' => $order->getAmounts($orderRepository),
         ]);
 
         $dompdf->loadHtml($html);
@@ -110,5 +112,14 @@ class OrderController extends AbstractController
             'form' => $form->createView(),
         ]);
 
+    }
+
+    #[Route('/remove/{id}', name: 'delete_order')]
+    public function delete(OrderRepository $orderRepository, int $id): Response
+    {
+        $order = $orderRepository->find($id);
+        $this->entityManager->remove($order);
+        $this->entityManager->flush();
+        return $this->redirectToRoute('orders');
     }
 }

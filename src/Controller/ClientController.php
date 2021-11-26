@@ -52,8 +52,29 @@ class ClientController extends AbstractController
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()) {
             $client = $form->getData();
-
+            
             $this->entityManager->persist($client);
+            $this->entityManager->flush();
+
+            return $this->redirectToRoute('clients');
+        }
+        
+        return $this->render('client/add.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+    #[Route('/edit/{id}', name:'edit_client')]
+    public function edit(Request $request, ClientRepository $clientRepository, int $id): Response
+    {
+        $client = $clientRepository->find($id);
+
+        $form = $this->createForm(ClientType::class, $client);
+
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid()) {
+            $client = $form->getData();
+
             $this->entityManager->flush();
 
             return $this->redirectToRoute('clients');
