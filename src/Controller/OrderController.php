@@ -40,7 +40,25 @@ class OrderController extends AbstractController
     }
 
     #[Route('/order/{id}', name: 'orders_view')]
-    public function show(OrderRepository $orderRepository, Dompdf $dompdf, int $id): Response
+    public function show(OrderRepository $orderRepository, int $id): Response
+    {
+        $order = $orderRepository->find($id);
+        $order->getAmounts($orderRepository);
+        return new Response($this->twig->render('order/show.html.twig', [
+            'order' => $orderRepository->find($id),
+            'amount' => [
+                1 => 2,
+                2 => 5,
+            ]
+        ]));
+    }
+
+    #[Route('/updateAmount/{id}')]
+    public function updateAmount() 
+    {
+    }
+
+    public function export(OrderRepository $orderRepository, Dompdf $dompdf, int $id): Response
     {
         $order = $orderRepository->find($id);
         if($order === null) {
@@ -63,7 +81,7 @@ class OrderController extends AbstractController
     }
 
     #[Route('/add/{clientId}', name:'add_order')]
-    public function add(Request $request, ?int $clientId = null): Response
+    public function add(OrderRepository $orderRepository, Request $request, ?int $clientId = null): Response
     {
         $order = new Order();
 
@@ -80,6 +98,7 @@ class OrderController extends AbstractController
 
             $this->entityManager->persist($order);
             $this->entityManager->flush();
+            $order->setUpAmounts($orderRepository);
 
             return $this->redirectToRoute('orders');
         }

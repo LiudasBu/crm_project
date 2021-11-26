@@ -1,0 +1,40 @@
+{% extends 'base_crm.html.twig' %}
+
+{% block title %} {{order.client.name}} {% endblock %}
+
+{% block body %}
+
+   <div class="row">
+        <div class="col-3">
+            <h4> {{ order.id }} </h4>        
+        </div>
+        <div class="col-3">
+        </div>
+        <div class="col-3">
+            <h6></h6>
+        </div>
+        <div class="col-3">
+            <h6></h6>
+        </div>
+   </div>
+    <div class="row">
+        <div class="col-12">
+         <form action="/orders/updateAmount/{{order.id}}" method="post">
+        <ul>
+            {% for product in order.products %}
+                <li>
+                    Name: {{ product.name }}
+                    <br>
+                    Price: {{ product.price }}€
+                    <br>
+                    <label for="product-id-{{product.id}}">Amount:</label><br>
+                    <input type="text" name="product-id-{{product.id}}" id="product-id-{{product.id}}" value={{ amount[product.id] }}>   
+                </li>
+            {% endfor %}
+        </ul>
+              <input type="submit" value="Submit">
+        </form>
+        </div>
+    </div>
+
+{% endblock %}

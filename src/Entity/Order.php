@@ -36,6 +36,7 @@ class Order
      */
     private $products;
 
+
     public function __construct()
     {
         $this->products = new ArrayCollection();
@@ -95,5 +96,15 @@ class Order
         }
 
         return $this;
+    }
+
+    public function setUpAmounts(OrderRepository $orderRepository)
+    {
+        $orderRepository->setUpAmounts($this);
+    }
+
+    public function getAmounts(OrderRepository $orderRepository)
+    {
+        $orderRepository->getAmounts($this);
     }
 }

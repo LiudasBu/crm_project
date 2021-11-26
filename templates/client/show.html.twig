@@ -3,7 +3,7 @@
 {% block title %} {{client.name}} {% endblock %}
 
 {% block body %}
-
+    <div id="current-entity-id" class="d-none">{{client.id}}</div>
    <div class="row">
         <div class="col-3">
             <h4> {{ client.name }} </h4>        
@@ -45,9 +45,13 @@
                         <br>
                     {% endfor %}
                 </div>
-                <div class="tab-pane fade" id="more" role="tabpanel" aria-labelledby="more-tab">More</div>
+                <div class="tab-pane fade" id="more" role="tabpanel" aria-labelledby="more-tab">
+                {% if is_granted('ROLE_ADMIN') %}
+                     <button id="delete-button">Delete</button>
+                {% endif %}
+                </div>
             </div>
         </div>
     </div>
-
+            {{ encore_entry_script_tags('remove_client') }}
 {% endblock %}

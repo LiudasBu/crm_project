@@ -19,6 +19,29 @@ class OrderRepository extends ServiceEntityRepository
         parent::__construct($registry, Order::class);
     }
 
+    public function setUpAmounts(Order $order)
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        foreach($order->getProducts() as $product)
+        {
+            $sql = "INSERT INTO order_amounts (order_id, product_id) VALUES (:order_id, :product_id);";
+            $stmt = $conn->prepare($sql);
+            $stmt->executeQuery(array('order_id' => $order->getId(), 'product_id' => $product->getId()));
+        }
+    }
+
+    public function getAmounts(Order $order)
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        foreach($order->getProducts() as $product)
+        {
+            $sql = "SELECT amount FROM order_amounts WHERE order_id = :order_id AND product_id = :product_id;";
+            $stmt = $conn->prepare($sql);
+            $result = $stmt->executeQuery(array('order_id' => $order->getId(), 'product_id' => $product->getId()));
+            dd($result->fetch());
+        }
+    }
+
     // /**
     //  * @return Order[] Returns an array of Order objects
     //  */

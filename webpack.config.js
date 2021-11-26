@@ -21,7 +21,7 @@ Encore
      * and one CSS file (e.g. app.css) if your JavaScript imports CSS.
      */
     .addEntry('main', './assets/main.ts')
-    .addEntry('swal', './assets/swal.ts')
+    .addEntry('remove_client', './assets/remove_client.ts')
 
     // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)
     .enableStimulusBridge('./assets/controllers.json')
