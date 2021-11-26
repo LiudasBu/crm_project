@@ -30,15 +30,28 @@ class OrderRepository extends ServiceEntityRepository
         }
     }
 
-    public function getAmounts(Order $order)
+    public function getAmounts(Order $order) : array
     {
         $conn = $this->getEntityManager()->getConnection();
+        $returnArr = [];
         foreach($order->getProducts() as $product)
         {
             $sql = "SELECT amount FROM order_amounts WHERE order_id = :order_id AND product_id = :product_id;";
             $stmt = $conn->prepare($sql);
             $result = $stmt->executeQuery(array('order_id' => $order->getId(), 'product_id' => $product->getId()));
-            dd($result->fetch());
+            $returnArr[$product->getId()] = $result->fetch()['amount'];
+        }
+        return $returnArr;
+    }
+
+    public function updateAmount(Order $order, array $amounts)
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        foreach($amounts as $productId => $amount)
+        {
+            $sql = "UPDATE order_amounts SET amount = :amount WHERE order_id = :order_id AND product_id = :product_id;";
+            $stmt = $conn->prepare($sql);
+            $stmt->executeQuery(array('order_id' => $order->getId(), 'product_id' => $productId, 'amount' => $amount));
         }
     }
 

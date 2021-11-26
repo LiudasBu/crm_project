@@ -28,7 +28,9 @@ class ProductController extends AbstractController
     public function index(ProductRepository $productRepository): Response
     {
         $response = new Response($this->twig->render('product/index.html.twig', [
-            'products' => $productRepository->findAll(),
+            'products' => $productRepository->findBy([
+                'isDeleted' => false,
+            ]),
         ]));
         
         return $response;
@@ -63,5 +65,14 @@ class ProductController extends AbstractController
             'form' => $form->createView(),
         ]);
 
+    }
+
+    #[Route('/remove/{id}', name: 'delete_product')]
+    public function delete(ProductRepository $productRepository, int $id): Response
+    {
+        $product = $productRepository->find($id);
+        $product->setIsDeleted(true);
+        $this->entityManager->flush();
+        return $this->redirectToRoute('products');
     }
 }

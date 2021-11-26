@@ -21,18 +21,19 @@
         <div class="col-12">
          <form action="/orders/updateAmount/{{order.id}}" method="post">
         <ul>
+            <input type="hidden" name="order-id" id="order-id" value={{ order.id }}>   
             {% for product in order.products %}
                 <li>
                     Name: {{ product.name }}
                     <br>
                     Price: {{ product.price }}€
                     <br>
-                    <label for="product-id-{{product.id}}">Amount:</label><br>
-                    <input type="text" name="product-id-{{product.id}}" id="product-id-{{product.id}}" value={{ amount[product.id] }}>   
+                    <label>Amount:</label><br>
+                    <input type="text" name="products[{{product.id}}]" id="products[{{product.id}}]" value={{ amount[product.id] }}>   
                 </li>
             {% endfor %}
         </ul>
-              <input type="submit" value="Submit">
+              <input type="submit" value="Update">
         </form>
         </div>
     </div>

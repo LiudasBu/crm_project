@@ -103,8 +103,13 @@ class Order
         $orderRepository->setUpAmounts($this);
     }
 
-    public function getAmounts(OrderRepository $orderRepository)
+    public function getAmounts(OrderRepository $orderRepository) :array
     {
-        $orderRepository->getAmounts($this);
+        return $orderRepository->getAmounts($this);
+    }
+
+    public function updateAmount(OrderRepository $orderRepository, array $amounts)
+    {
+        $orderRepository->updateAmount($this, $amounts);
     }
 }

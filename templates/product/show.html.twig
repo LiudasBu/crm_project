@@ -3,6 +3,7 @@
 {% block title %} {{product.name}} {% endblock %}
 
 {% block body %}
+    <div id="current-entity-id" class="d-none">{{product.id}}</div>
 
    <div class="row">
         <div class="col-3">
@@ -19,7 +20,10 @@
         </div>
    </div>
     <div class="row">
-       
+        {% if is_granted('ROLE_ADMIN') %}
+            <button id="delete-button">Delete</button>
+        {% endif %}
     </div>
+            {{ encore_entry_script_tags('remove_product') }}
 
 {% endblock %}

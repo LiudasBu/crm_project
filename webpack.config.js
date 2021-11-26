@@ -22,6 +22,7 @@ Encore
      */
     .addEntry('main', './assets/main.ts')
     .addEntry('remove_client', './assets/remove_client.ts')
+    .addEntry('remove_product', './assets/remove_product.ts')
 
     // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)
     .enableStimulusBridge('./assets/controllers.json')

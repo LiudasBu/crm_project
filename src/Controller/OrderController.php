@@ -46,16 +46,19 @@ class OrderController extends AbstractController
         $order->getAmounts($orderRepository);
         return new Response($this->twig->render('order/show.html.twig', [
             'order' => $orderRepository->find($id),
-            'amount' => [
-                1 => 2,
-                2 => 5,
-            ]
+            'amount' => $order->getAmounts($orderRepository),
         ]));
     }
 
     #[Route('/updateAmount/{id}')]
-    public function updateAmount() 
+    public function updateAmount(Request $request, OrderRepository $orderRepository)
     {
+        $orderId = $request->get('order-id');
+        $order = $orderRepository->find($orderId);
+        $amounts = $request->get('products');
+        $order->updateAmount($orderRepository, $amounts);
+
+        return $this->redirectToRoute('orders_view', ['id' => $orderId]);
     }
 
     public function export(OrderRepository $orderRepository, Dompdf $dompdf, int $id): Response

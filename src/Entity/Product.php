@@ -34,9 +34,15 @@ class Product
      */
     private $orders;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isDeleted;
+
     public function __construct()
     {
         $this->orders = new ArrayCollection();
+        $this->isDeleted = false;
     }
     
     public function __toString()
@@ -93,6 +99,18 @@ class Product
     public function removeOrder(Order $order): self
     {
         $this->orders->removeElement($order);
+
+        return $this;
+    }
+
+    public function getIsDeleted(): ?bool
+    {
+        return $this->isDeleted;
+    }
+
+    public function setIsDeleted(bool $isDeleted): self
+    {
+        $this->isDeleted = $isDeleted;
 
         return $this;
     }
