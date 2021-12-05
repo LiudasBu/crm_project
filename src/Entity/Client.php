@@ -75,7 +75,7 @@ class Client
     public function updateTimestamps(): void
     {
         if ($this->getCreatedAt() === null) {
-            $this->setCreatedAt(new \DateTimeImmutable('now'));
+            $this->setCreatedAt(new \DateTimeImmutable('now')); 
         }
     }
 

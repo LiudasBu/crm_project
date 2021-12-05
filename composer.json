@@ -14,6 +14,8 @@
         "doctrine/orm": "^2.9",
         "dompdf/dompdf": "^1.0",
         "phpdocumentor/reflection-docblock": "^5.2",
+        "phpmailer/phpmailer": "^6.5",
+        "sendgrid/sendgrid": "^7.11",
         "sensio/framework-extra-bundle": "^6.1",
         "symfony/apache-pack": "^1.0",
         "symfony/asset": "5.3.*",

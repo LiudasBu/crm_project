@@ -24,15 +24,6 @@ class ClientController extends AbstractController
         $this->entityManager = $entityManager;
     }
 
-    #[Route('', name: 'clients')]
-    public function index(ClientRepository $clientRepository): Response
-    {
-        $response = new Response($this->twig->render('client/index.html.twig', [
-            'clients' => $clientRepository->findAll(),
-        ]));
-        
-        return $response;
-    }
 
     #[Route('/client/{id}', name: 'clients_view')]
     public function show(ClientRepository $clientRepository, int $id): Response
@@ -93,4 +84,60 @@ class ClientController extends AbstractController
         $this->entityManager->flush();
         return $this->redirectToRoute('clients');
     }
+
+    #[Route('/search', name: 'search_client')]
+    public function search(ClientRepository $clientRepository, Request $request): Response
+    {
+        $name = $request->request->get('clientName');
+        $result = $clientRepository->createQueryBuilder('c')
+        ->where('c.name LIKE :name')
+        ->setParameter('name', "%{$name}%")
+        ->getQuery()
+        ->getResult();
+        
+        $response = new Response($this->twig->render('client/search.html.twig', [
+            'clients' => $result,
+        ]));
+        return $response;
+    }
+
+    
+    #[Route('/{page}', name: 'clients')]
+    public function index(ClientRepository $clientRepository, int $page=1): Response
+    {
+
+        // build the query for the doctrine paginator
+        $query = $clientRepository->createQueryBuilder('u')
+                            ->orderBy('u.id', 'ASC')
+                            ->getQuery();
+
+        //set page size
+        $pageSize = '2';
+
+        // load doctrine Paginator
+        $paginator = new \Doctrine\ORM\Tools\Pagination\Paginator($query);
+
+        // you can get total items
+        $totalItems = count($paginator);
+
+        // get total pages
+        $pagesCount = ceil($totalItems / $pageSize);
+
+        // now get one page's items:
+        $paginator
+            ->getQuery()
+            ->setFirstResult($pageSize * ($page-1)) // set the offset
+            ->setMaxResults($pageSize); // set the limit
+
+        ($page == $pagesCount) ? $max = false : $max = true;
+        $response = new Response($this->twig->render('client/index.html.twig', [
+            'clients' => $paginator,
+            'page' => $page,
+            'max' => $max,
+            'totalPages' => $pagesCount,
+        ]));
+        
+        return $response;
+    }
+
 }

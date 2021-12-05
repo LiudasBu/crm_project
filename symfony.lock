@@ -139,6 +139,9 @@
     "phpdocumentor/type-resolver": {
         "version": "1.4.0"
     },
+    "phpmailer/phpmailer": {
+        "version": "v6.5.3"
+    },
     "phpspec/prophecy": {
         "version": "1.13.0"
     },
@@ -237,6 +240,12 @@
     "sebastian/version": {
         "version": "3.0.2"
     },
+    "sendgrid/php-http-client": {
+        "version": "3.14.0"
+    },
+    "sendgrid/sendgrid": {
+        "version": "7.11.0"
+    },
     "sensio/framework-extra-bundle": {
         "version": "5.2",
         "recipe": {
@@ -248,6 +257,9 @@
         "files": [
             "config/packages/sensio_framework_extra.yaml"
         ]
+    },
+    "starkbank/ecdsa": {
+        "version": "0.0.5"
     },
     "symfony/apache-pack": {
         "version": "1.0",

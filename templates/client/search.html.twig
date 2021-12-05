@@ -15,14 +15,6 @@
                 </a>
             {% endfor %}
             <div>
-            <div>Page {{ page }} out of {{ totalPages }}</div>
-            {% if page != 1 %}
-                <a href="{{ path('clients', {page: page-1}) }}">Prev</a>
-            {% endif %}
-            {% if max %}
-                <a href="{{ path('clients', {page: page+1}) }}">Next</a>
-            {% endif %}
-            </div>
         </div>
         <div class="col-3">
             <a class="btn btn-success" href="{{ path('add_client') }}">
