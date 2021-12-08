@@ -95,7 +95,27 @@ class OrderController extends AbstractController
          $mail = new PHPMailer(true);
  
     try {
-
+        //Server settings
+        $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
+        $mail->isSMTP();                                            //Send using SMTP
+        $mail->Host       = 'smtp.mail.yahoo.com';                     //Set the SMTP server to send through
+        $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
+        $mail->Username   = 'viko.crm@yahoo.com';                     //SMTP username
+        $mail->Password   = $this->getParameter('app.mail.pass');                               //SMTP password
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
+        $mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+    
+        //Recipients
+        $mail->setFrom('viko.crm@yahoo.com', 'Viko CRM');
+        $mail->addAddress('liudas.bucys@gmail.com', 'Client');     //Add a recipient
+    
+        //Attachments
+        // $mail->addAttachment('/var/tmp/file.tar.gz');         //Add attachments
+        $html = $this->renderView('export/pdf/order.html.twig', [
+            'title' => "Order {$id}",
+            'order' => $order,
+            'amount' => $order->getAmounts($orderRepository),
+        ]);
 
         $dompdf = new DOMPDF();
         $dompdf->loadHtml($html);
