@@ -47,4 +47,13 @@ class ProductRepository extends ServiceEntityRepository
         ;
     }
     */
+    public function getCount(): int
+    {
+        return $this->createQueryBuilder('p')
+            ->select('count(p.id)')
+            ->where('p.isDeleted = FALSE')
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
+    }
 }

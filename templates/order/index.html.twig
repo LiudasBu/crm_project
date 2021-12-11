@@ -5,11 +5,27 @@
 {% block body %}
    <div class="row">
         <div class="col-9">
+            {# <form action="/orders/search" method="post">
+                <input type="text" name="orderName" id="orderName">   
+                <input type="submit" value="Search">
+            </form>
+        <hr class="solid"> #}
+        <div class="mt-3">
             {% for order in orders %}
                 <a href="{{ path('orders_view', { id: order.id }) }}">
-                    <h4>{{ order.id }} {{ order.client }}</h4> 
+                    <h4>#{{ order.id }} {{ order.client }}</h4> 
                 </a>
             {% endfor %}
+        </div>
+            <div>
+                <div class="mt-4">Page {{ page }} out of {{ totalPages }}</div>
+                {% if page != 1 %}
+                    <a href="{{ path('orders', {page: page-1}) }}">Prev</a>
+                {% endif %}
+                {% if max %}
+                    <a href="{{ path('orders', {page: page+1}) }}">Next</a>
+                {% endif %}
+            </div>
         </div>
         <div class="col-3">
            

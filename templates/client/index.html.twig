@@ -9,13 +9,17 @@
             <input type="text" name="clientName" id="clientName">   
             <input type="submit" value="Search">
         </form>
+        <hr class="solid">
+        <div class="mt-3">
             {% for client in clients %}
+            <div class="my-hover">
                 <a href="{{ path('clients_view', { id: client.id }) }}">
                     <h4>{{ client.name }}</h4> 
                 </a>
+            </div>
             {% endfor %}
             <div>
-            <div>Page {{ page }} out of {{ totalPages }}</div>
+            <div class="mt-4">Page {{ page }} out of {{ totalPages }}</div>
             {% if page != 1 %}
                 <a href="{{ path('clients', {page: page-1}) }}">Prev</a>
             {% endif %}
@@ -23,10 +27,19 @@
                 <a href="{{ path('clients', {page: page+1}) }}">Next</a>
             {% endif %}
             </div>
+            </div>
         </div>
         <div class="col-3">
             <a class="btn btn-success" href="{{ path('add_client') }}">
                 <i class="fas fa-user pr-1"></i> Add new</a>
         </div>
    </div>
+   <style>
+   .my-hover:hover {
+        background: rgba(211,211,211, 0.3);
+        }
+    .my-hover a:hover {
+        color: black;
+        }
+   </style>
 {% endblock %}

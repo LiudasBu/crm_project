@@ -13,16 +13,19 @@
             <h6>€{{ product.price }}</h6>
         </div>
         <div class="col-3">
-            <a href="{{ path('edit_product', {id: product.id}) }}">Redaguoti</a>
+            <a href="{{ path('edit_product', {id: product.id}) }}">Edit</a>
         </div>
         <div class="col-3">
             <h6></h6>
         </div>
    </div>
     <div class="row">
-        {% if is_granted('ROLE_ADMIN') %}
-            <button id="delete-button">Delete</button>
-        {% endif %}
+        <div class="col-12 mt-2">
+            <hr class="solid">
+            {% if is_granted('ROLE_ADMIN') %}
+                <button id="delete-button" class="btn btn-danger">Delete</button>
+            {% endif %}
+        </div>
     </div>
             {{ encore_entry_script_tags('remove_product') }}
 

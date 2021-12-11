@@ -89,8 +89,11 @@ class ClientController extends AbstractController
     public function search(ClientRepository $clientRepository, Request $request): Response
     {
         $name = $request->request->get('clientName');
+        if($name === '') {
+            return $this->redirectToRoute('clients');
+        }
         $result = $clientRepository->createQueryBuilder('c')
-        ->where('c.name LIKE :name')
+        ->where('LOWER(c.name) LIKE LOWER(:name)')
         ->setParameter('name', "%{$name}%")
         ->getQuery()
         ->getResult();
@@ -112,7 +115,7 @@ class ClientController extends AbstractController
                             ->getQuery();
 
         //set page size
-        $pageSize = '2';
+        $pageSize = $this->getParameter('page.size') ?? 10;
 
         // load doctrine Paginator
         $paginator = new \Doctrine\ORM\Tools\Pagination\Paginator($query);

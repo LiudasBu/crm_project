@@ -4,14 +4,15 @@
 
 {% block body %}
     <div id="current-entity-id" class="d-none">{{order.id}}</div>
-   <div class="row">
+   <div class="row mb-3">
         <div class="col-3">
-            <h4> {{ order.id }} </h4>        
+            <h4> Order #{{ order.id }} </h4>        
         </div>
         <div class="col-3">
+            <h6>Client name: {{ order.client }}</h6>
         </div>
         <div class="col-3">
-            <h6></h6>
+            <h6>Client mail: {{ order.client.email }}</h6>
         </div>
         <div class="col-3">
             <h6></h6>
@@ -23,7 +24,7 @@
         <ul>
             <input type="hidden" name="order-id" id="order-id" value={{ order.id }}>   
             {% for product in order.products %}
-                <li>
+                <li class="mb-3">
                     Name: {{ product.name }}
                     <br>
                     Price: {{ product.price }}€
@@ -33,14 +34,17 @@
                 </li>
             {% endfor %}
         </ul>
-              <input type="submit" value="Update">
+              <input type="submit" class="btn btn-primary" value="Update">
         </form>
-        {% if is_granted('ROLE_ADMIN') %}
-            <button id="delete-button">Delete</button>
-        {% endif %}
-        <div>
+         {% if is_granted('ROLE_ADMIN') %}
+            <button id="delete-button" class="btn btn-danger mt-2">Delete</button>
+         {% endif %}
+        <div class="mt-2">
             <a class="btn btn-md btn-secondary mt-2" href="{{ path('orders_export', {'id': order.id}) }}">
                 PDF
+            </a>
+            <a class="btn btn-md btn-secondary mt-2 ms-2" href="{{ path('mail', {'id': order.id}) }}">
+                Send by mail
             </a>
         </div>
         </div>

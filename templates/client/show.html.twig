@@ -17,42 +17,59 @@
             <h6> {{ client.address }} </h6>
         </div>
         <div class="col-3">
-            <p>Created at</p>   
-            <h6> {{ client.createdAt|date("m/d/Y") }} </h6>
-            <a href="{{ path('edit_client', {id: client.id}) }}">Redaguoti</a>
+            <p>Country</p>   
+            <h6> {{ client.country }} </h6>
+            <a href="{{ path('edit_client', {id: client.id}) }}">Edit</a>
         </div>
    </div>
     <div class="row">
         <div class="col-12">
             <ul class="nav nav-tabs" id="clientsTabs" role="tablist">
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">Home</button>
+                    <button class="nav-link active" id="orders-tab" data-bs-toggle="tab" data-bs-target="#orders" type="button" role="tab" aria-controls="orders" aria-selected="true">Orders</button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="orders-tab" data-bs-toggle="tab" data-bs-target="#orders" type="button" role="tab" aria-controls="orders" aria-selected="false">Orders</button>
+                    <button class="nav-link" id="more-tab" data-bs-toggle="tab" data-bs-target="#more" type="button" role="tab" aria-controls="more" aria-selected="false">Delete</button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="more-tab" data-bs-toggle="tab" data-bs-target="#more" type="button" role="tab" aria-controls="more" aria-selected="false">More</button>
+                    <button class="nav-link" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="false">Created at</button>
                 </li>
             </ul>
             <div class="tab-content" id="myTabContent">
-                <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">Home</div>
-                <div class="tab-pane fade" id="orders" role="tabpanel" aria-labelledby="orders-tab">
+                <div class="tab-pane fade" id="home" role="tabpanel" aria-labelledby="home-tab">
+                    <div class="mt-3 ms-2">
+                        Created at: {{ client.createdAt|date("m/d/Y") }}
+                    </div>
+                </div>
+                <div class="tab-pane fade show active pt-4 ms-2" id="orders" role="tabpanel" aria-labelledby="orders-tab">
                 <a class="btn btn-success" href="{{ path('add_order', { clientId: client.id }) }}">
                     <i class="fas fa-user pr-1"></i> Add new</a>
-                    <br>
+                     <hr class="solid">
+                
                     {% for order in client.orders %}
-                        <a href="{{ path('orders_view', {id: order.id}) }}">{{order.id}}</a>
+                        <a href="{{ path('orders_view', {id: order.id}) }}">Order #{{order.id}}</a>
                         <br>
                     {% endfor %}
                 </div>
                 <div class="tab-pane fade" id="more" role="tabpanel" aria-labelledby="more-tab">
                 {% if is_granted('ROLE_ADMIN') %}
-                     <button id="delete-button">Delete</button>
+                     <button id="delete-button" class="btn btn-danger mt-4 ms-2">Delete</button>
+                {% else %} 
+                <p class="mt-3 ms-2">
+                    You currently do not have the rights to delete a client
+                </p>
                 {% endif %}
                 </div>
             </div>
         </div>
     </div>
+          <style>
+   .my-hover:hover {
+        background: rgba(211,211,211, 0.3);
+        }
+    .my-hover a:hover {
+        color: black;
+        }
+   </style>
             {{ encore_entry_script_tags('remove_client') }}
 {% endblock %}

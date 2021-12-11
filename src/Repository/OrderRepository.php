@@ -83,4 +83,12 @@ class OrderRepository extends ServiceEntityRepository
         ;
     }
     */
+    public function getCount(): int
+    {
+        return $this->createQueryBuilder('o')
+            ->select('count(o.id)')
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
+    }
 }

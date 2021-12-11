@@ -18,6 +18,7 @@ class ClientType extends AbstractType
             ->add('phoneNumber', TextType::class)
             ->add('email', TextType::class)
             ->add('address', TextType::class)
+            ->add('country', TextType::class)
             ->add('save', SubmitType::class)
         ;
     }

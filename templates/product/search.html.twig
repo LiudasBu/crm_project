@@ -16,15 +16,11 @@
                 <a href="{{ path('products_view', { id: product.id }) }}">
                     <h4>{{ product.name }}</h4> 
                 </a>
-                </div>
+            </div>
             {% endfor %}
-            <div class="mt-4">Page {{ page }} out of {{ totalPages }}</div>
-            {% if page != 1 %}
-                <a href="{{ path('products', {page: page-1}) }}">Prev</a>
-            {% endif %}
-            {% if max %}
-                <a href="{{ path('products', {page: page+1}) }}">Next</a>
-            {% endif %}
+            <div class="mt-4">
+                Found {{ products|length }} results
+            </div>
         </div>
         </div>
         <div class="col-3">
@@ -32,8 +28,8 @@
                 <i class="fas fa-user pr-1"></i> Add new</a>
         </div>
    </div>
-    <style>
-   .my-hover:hover {
+   <style>
+    .my-hover:hover {
         background: rgba(211,211,211, 0.3);
         }
     .my-hover a:hover {

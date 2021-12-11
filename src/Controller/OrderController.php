@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Order;
 use App\Entity\Client;
 use App\Entity\Product;
+use App\Entity\User;
 use App\Form\OrderType;
 use App\Repository\OrderRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -32,15 +33,15 @@ class OrderController extends AbstractController
         $this->entityManager = $entityManager;
     }
 
-    #[Route('', name: 'orders')]
-    public function index(OrderRepository $orderRepository): Response
-    {
-        $response = new Response($this->twig->render('order/index.html.twig', [
-            'orders' => $orderRepository->findAll(),
-        ]));
+    // #[Route('', name: 'orders')]
+    // public function index(OrderRepository $orderRepository): Response
+    // {
+    //     $response = new Response($this->twig->render('order/index.html.twig', [
+    //         'orders' => $orderRepository->findAll(),
+    //     ]));
         
-        return $response;
-    }
+    //     return $response;
+    // }
 
     #[Route('/order/{id}', name: 'orders_view')]
     public function show(OrderRepository $orderRepository, int $id): Response
@@ -62,6 +63,25 @@ class OrderController extends AbstractController
         $order->updateAmount($orderRepository, $amounts);
 
         return $this->redirectToRoute('orders_view', ['id' => $orderId]);
+    }
+
+    #[Route('/search', name: 'search_order')]
+    public function search(OrderRepository $orderRepository, Request $request): Response
+    {
+        $name = $request->request->get('orderName');
+        if($name === '') {
+            return $this->redirectToRoute('orders');
+        }
+        $result = $orderRepository->createQueryBuilder('o')
+        ->where('LOWER(o.client) LIKE LOWER(:name)')
+        ->setParameter('name', "%{$name}%")
+        ->getQuery()
+        ->getResult();
+        
+        $response = new Response($this->twig->render('product/search.html.twig', [
+            'products' => $result,
+        ]));
+        return $response;
     }
 
     #[Route('/export/{id}', name: 'orders_export')]
@@ -91,6 +111,7 @@ class OrderController extends AbstractController
     function sendEmail(OrderRepository $orderRepository, int $id): Response
      {
         $order = $orderRepository->find($id);
+        $client = $this->entityManager->getRepository(Client::class)->find($order->getClient()->getId());
 
          $mail = new PHPMailer(true);
  
@@ -107,7 +128,7 @@ class OrderController extends AbstractController
     
         //Recipients
         $mail->setFrom('viko.crm@yahoo.com', 'Viko CRM');
-        $mail->addAddress('liudas.bucys@gmail.com', 'Client');     //Add a recipient
+        $mail->addAddress($client->getEmail(), $client->getName());     //Add a recipient
     
         //Attachments
         // $mail->addAttachment('/var/tmp/file.tar.gz');         //Add attachments
@@ -126,15 +147,15 @@ class OrderController extends AbstractController
     
         //Content
         $mail->isHTML(true);                                  //Set email format to HTML
-        $mail->Subject = 'Here is the subject';
-        $mail->Body    = 'This is the HTML message body <b>in bold!</b>';
-        $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
-    
+        $mail->Subject = 'Invoice for order #' . $order->getId();
+        $mail->Body    = "This is the invoice for order #<b>{$order->getId()}</b>";
+        $mail->AltBody = "This is the invoice for order #{$order->getId()}";
+        
         $mail->send();
         } catch (\Exception $e) {
             echo "Message could not be sent.";
         }
-        return $this->redirectToRoute('clients');
+        return $this->redirectToRoute('orders');
 
      }
 
@@ -174,5 +195,43 @@ class OrderController extends AbstractController
         $this->entityManager->remove($order);
         $this->entityManager->flush();
         return $this->redirectToRoute('orders');
+    }
+
+    #[Route('/{page}', name: 'orders')]
+    public function index(OrderRepository $orderRepository, int $page=1): Response
+    {
+
+        // build the query for the doctrine paginator
+        $query = $orderRepository->createQueryBuilder('p')
+                            ->orderBy('p.id', 'ASC')
+                            ->getQuery();
+
+        //set page size
+        $pageSize = $this->getParameter('page.size') ?? 10;
+
+        // load doctrine Paginator
+        $paginator = new \Doctrine\ORM\Tools\Pagination\Paginator($query);
+
+        // you can get total items
+        $totalItems = count($paginator);
+
+        // get total pages
+        $pagesCount = ceil($totalItems / $pageSize);
+
+        // now get one page's items:
+        $paginator
+            ->getQuery()
+            ->setFirstResult($pageSize * ($page-1)) // set the offset
+            ->setMaxResults($pageSize); // set the limit
+
+        ($page == $pagesCount) ? $max = false : $max = true;
+        $response = new Response($this->twig->render('order/index.html.twig', [
+            'orders' => $paginator,
+            'page' => $page,
+            'max' => $max,
+            'totalPages' => $pagesCount,
+        ]));
+        
+        return $response;
     }
 }

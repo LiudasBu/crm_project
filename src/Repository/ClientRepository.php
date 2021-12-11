@@ -47,4 +47,12 @@ class ClientRepository extends ServiceEntityRepository
         ;
     }
     */
+    public function getCount(): int
+    {
+        return $this->createQueryBuilder('c')
+            ->select('count(c.id)')
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
+    }
 }

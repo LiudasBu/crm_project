@@ -6,12 +6,14 @@
 {% include 'sidebar.html.twig' %}
 
 <div class="col-md-9 col-xl-8">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+    <h1>Hello {{ user.firstname }} {{ user.lastname }}! </h1>
 
-    This friendly message is coming from:
+    Currently the system has:
     <ul>
-        <li>Your controller at <code><a href="{{ '/home/liudas/Documents/Symfony/crm_project/src/Controller/DashboardController.php'|file_link(0) }}">src/Controller/DashboardController.php</a></code></li>
-        <li>Your template at <code><a href="{{ '/home/liudas/Documents/Symfony/crm_project/templates/dashboard/index.html.twig'|file_link(0) }}">templates/dashboard/index.html.twig</a></code></li>
+        <li>{{ userCount }} users</li>
+        <li>{{ clientCount }} clients</li>
+        <li>{{ productCount }} products</li>
+        <li>{{ orderCount }} orders</li>
     </ul>
 </div>
 {% endblock %}

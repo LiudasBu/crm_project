@@ -24,17 +24,17 @@ class ProductController extends AbstractController
         $this->entityManager = $entityManager;
     }
 
-    #[Route('', name: 'products')]
-    public function index(ProductRepository $productRepository): Response
-    {
-        $response = new Response($this->twig->render('product/index.html.twig', [
-            'products' => $productRepository->findBy([
-                'isDeleted' => false,
-            ]),
-        ]));
+    // #[Route('', name: 'products')]
+    // public function index(ProductRepository $productRepository): Response
+    // {
+    //     $response = new Response($this->twig->render('product/index.html.twig', [
+    //         'products' => $productRepository->findBy([
+    //             'isDeleted' => false,
+    //         ]),
+    //     ]));
         
-        return $response;
-    }
+    //     return $response;
+    // }
 
     #[Route('/product/{id}', name: 'products_view')]
     public function show(ProductRepository $productRepository, int $id): Response
@@ -96,5 +96,64 @@ class ProductController extends AbstractController
         $product->setIsDeleted(true);
         $this->entityManager->flush();
         return $this->redirectToRoute('products');
+    }
+
+    #[Route('/search', name: 'search_product')]
+    public function search(ProductRepository $productRepository, Request $request): Response
+    {
+        $name = $request->request->get('productName');
+        if($name === '') {
+            return $this->redirectToRoute('products');
+        }
+        $result = $productRepository->createQueryBuilder('p')
+        ->where('LOWER(p.name) LIKE LOWER(:name)')
+        ->andWhere('p.isDeleted = FALSE')
+        ->setParameter('name', "%{$name}%")
+        ->getQuery()
+        ->getResult();
+        
+        $response = new Response($this->twig->render('product/search.html.twig', [
+            'products' => $result,
+        ]));
+        return $response;
+    }
+
+    #[Route('/{page}', name: 'products')]
+    public function index(ProductRepository $productRepository, int $page=1): Response
+    {
+
+        // build the query for the doctrine paginator
+        $query = $productRepository->createQueryBuilder('p')
+                            ->orderBy('p.id', 'ASC')
+                            ->where('p.isDeleted = FALSE')
+                            ->getQuery();
+
+        //set page size
+        $pageSize = $this->getParameter('page.size') ?? 10;
+
+        // load doctrine Paginator
+        $paginator = new \Doctrine\ORM\Tools\Pagination\Paginator($query);
+
+        // you can get total items
+        $totalItems = count($paginator);
+
+        // get total pages
+        $pagesCount = ceil($totalItems / $pageSize);
+
+        // now get one page's items:
+        $paginator
+            ->getQuery()
+            ->setFirstResult($pageSize * ($page-1)) // set the offset
+            ->setMaxResults($pageSize); // set the limit
+
+        ($page == $pagesCount) ? $max = false : $max = true;
+        $response = new Response($this->twig->render('product/index.html.twig', [
+            'products' => $paginator,
+            'page' => $page,
+            'max' => $max,
+            'totalPages' => $pagesCount,
+        ]));
+        
+        return $response;
     }
 }
