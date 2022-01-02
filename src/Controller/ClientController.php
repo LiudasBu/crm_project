@@ -85,6 +85,30 @@ class ClientController extends AbstractController
         return $this->redirectToRoute('clients');
     }
 
+    #[Route('/massMail', name: 'client_mass_mail')]
+    public function massMail(Request $request) : Response
+    {
+        $ids = $request->query->all();
+        return $this->render('client/mail.html.twig', [
+            'ids' => implode(',', $ids),
+        ]);
+    }
+
+    #[Route('/sendMail', name: 'client_mass_mail_send')]
+    public function sendMail(ClientRepository $clientRepository, Request $request) : Response
+    {
+        $ids = $request->query->get('ids');
+        $emailText = $request->query->get('emailText');
+        $password = $this->getParameter('app.mail.pass');
+        
+        foreach(explode(',', $ids) as $clientId) {
+            $client = $clientRepository->find($clientId);
+            $client->sendMail($emailText, $password);
+        }
+
+        return $this->redirectToRoute('clients');
+    }
+
     #[Route('/search', name: 'search_client')]
     public function search(ClientRepository $clientRepository, Request $request): Response
     {

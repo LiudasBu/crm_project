@@ -11,13 +11,28 @@
         </form>
         <hr class="solid">
         <div class="mt-3">
+
+        <form action="/clients/massMail">
             {% for client in clients %}
             <div class="my-hover">
-                <a href="{{ path('clients_view', { id: client.id }) }}">
-                    <h4>{{ client.name }}</h4> 
+            <div class="row">
+            <input type="checkbox" name="{{ client.name }}" value="{{ client.id }}" class="col-1" style="width: 20px; height:20xp; margin-left:12px; margin-bottom: 5px;">
+                <a href="{{ path('clients_view', { id: client.id }) }}" class="col-9">
+                    <h4 >{{ client.name }}</h4> 
                 </a>
+                <div class="col-2">
+                    <a href="mailto:{{client.email}}" class="me-2 no-link-style">
+                        <i class="fas fa-envelope-square"></i></a>
+                    <a href="tel:{{client.phoneNumber}}" class="no-link-style">
+                        <i class="fas fa-phone"></i>
+                    </a>
+                </div>
+                </div>
             </div>
             {% endfor %}
+            <button type="submit" class="btn btn-secondary mt-3">Mass mail</button>
+        </form>
+
             <div>
             <div class="mt-4">Page {{ page }} out of {{ totalPages }}</div>
             {% if page != 1 %}
@@ -41,5 +56,9 @@
     .my-hover a:hover {
         color: black;
         }
+     .no-link-style{
+     text-decoration: none;
+     color: inherit;
+ }  
    </style>
 {% endblock %}

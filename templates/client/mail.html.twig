@@ -1,0 +1,16 @@
+{% extends 'base_crm.html.twig' %}
+
+{% block title %}Mass mail{% endblock %}
+
+{% block body %}
+
+<div class="row">
+    <form action="/clients/sendMail">
+        <h3>Email contents:</h3>
+        <input type="hidden" name="ids" value="{{ ids }}">
+        <textarea name="emailText" id="emailText" cols="50" rows="10"></textarea><br>
+        <input type="submit" class="btn btn-secondary mt-1" value="Send mail">
+    </form>
+</div>
+
+{% endblock %}

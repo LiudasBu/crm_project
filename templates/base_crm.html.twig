@@ -11,8 +11,21 @@
         {% block javascripts %}
             {{ encore_entry_script_tags('main') }}
         {% endblock %}
+        <style>
+        
+            .header {
+            padding-top: 5px;
+            text-align: center;
+            background: darkblue;
+            color: white;
+            font-size: 30px;
+            } 
+        </style>
     </head>
-    <body class="container-fluid m-2">
+    <body class="">
+     <div class="header">
+        <h1>Viko CRM</h1>
+    </div> 
         <div class="row">
             {% include 'sidebar.html.twig' %}
 

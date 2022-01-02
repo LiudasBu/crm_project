@@ -8,6 +8,9 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
+use Exception;
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
 
 /**
  * @ORM\Entity(repositoryClass=ClientRepository::class)
@@ -201,5 +204,36 @@ class Client
         $this->country = $country;
 
         return $this;
+    }
+
+    public function sendMail(string $text, string $password)
+    {
+        $mail = new PHPMailer(true);
+ 
+        try {
+            //Server settings
+            $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
+            $mail->isSMTP();                                            //Send using SMTP
+            $mail->Host       = 'smtp.mail.yahoo.com';                     //Set the SMTP server to send through
+            $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
+            $mail->Username   = 'viko.crm@yahoo.com';                     //SMTP username
+            $mail->Password   = $password;                               //SMTP password
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
+            $mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+        
+            //Recipients
+            $mail->setFrom('viko.crm@yahoo.com', 'Viko CRM');
+            $mail->addAddress($this->email, $this->name);     //Add a recipient
+        
+            //Content
+            $mail->isHTML(true);                                  //Set email format to HTML
+            $mail->Subject = 'Email from Viko CRM';
+            $mail->Body    = $text;
+            // $mail->AltBody = "This is the invoice for order #{$order->getId()}";
+            
+            $mail->send();
+            } catch (\Exception $e) {
+                echo "Message could not be sent.";
+            }
     }
 }
